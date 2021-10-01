@@ -1,0 +1,251 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "タイトル",
+        "description": "説明",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "\/sample": {
+            "get": {
+                "summary": "title",
+                "description": "description",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "text\/plain": []
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DefaultErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DefaultErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DefaultErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/DefaultErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/sample\/oneof": {
+            "get": {
+                "summary": "OneOf",
+                "description": "OneOfの実装サンプル",
+                "requestBody": {
+                    "$ref": "#\/components\/requestBodies\/OneOfSampleRequestBody"
+                }
+            }
+        },
+        "\/sample\/allof": {
+            "get": {
+                "summary": "AllOf",
+                "description": "AllOfの実装サンプル",
+                "requestBody": {
+                    "$ref": "#\/components\/requestBodies\/AllOfSampleRequestBody"
+                }
+            }
+        },
+        "\/sample\/query_parameter": {
+            "get": {
+                "summary": "クエリパラメータ",
+                "description": "クエリパラメータの実装サンプル",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "nanika no ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        },
+        "\/sample\/path_parameter\/{id}": {
+            "get": {
+                "summary": "パスパラメータ",
+                "description": "パスパラメータの実装サンプル",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        },
+        "\/sample\/assertion": {
+            "get": {
+                "summary": "Assert",
+                "description": "レスポンスのアサーションテストサンプル",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "name",
+                                        "age",
+                                        "birthday"
+                                    ],
+                                    "properties": {
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "age": {
+                                            "type": "integer"
+                                        },
+                                        "birthday": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Cat": {
+                "type": "object",
+                "properties": {
+                    "hunts": {
+                        "type": "boolean"
+                    },
+                    "age": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "DefaultErrorResponse": {
+                "type": "object",
+                "required": [
+                    "code",
+                    "message"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "field",
+                                "messages"
+                            ],
+                            "properties": {
+                                "field": {
+                                    "type": "string"
+                                },
+                                "messages": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Dog": {
+                "type": "object",
+                "properties": {
+                    "bark": {
+                        "type": "boolean"
+                    },
+                    "bread": {
+                        "enum": [
+                            "Dingo",
+                            "Husky",
+                            "Retriever",
+                            "Shepherd"
+                        ],
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "requestBodies": {
+            "AllOfSampleRequestBody": {
+                "content": {
+                    "application\/json": {
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#\/components\/schemas\/Cat"
+                                },
+                                {
+                                    "$ref": "#\/components\/schemas\/Dog"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "OneOfSampleRequestBody": {
+                "content": {
+                    "application\/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#\/components\/schemas\/Cat"
+                                },
+                                {
+                                    "$ref": "#\/components\/schemas\/Dog"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
